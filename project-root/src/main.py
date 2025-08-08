@@ -39,13 +39,17 @@ class AppHandler(BaseHTTPRequestHandler):
             return self._serve_file(TEMPLATES / "index.html")
         if self.path == "/message.html":
             return self._serve_file(TEMPLATES / "message.html")
+        if self.path == "/style.css":
+            return self._serve_file(STATIC / "style.css")
+        if self.path == "/logo.png":
+            return self._serve_file(STATIC / "logo.png")
         if self.path.startswith("/static/"):
             rel = self.path.removeprefix("/static/")
             return self._serve_file(STATIC / rel)
         return self._serve_error()
 
     def do_POST(self):
-        if self.path != "/submit":
+        if self.path not in ("/submit", "/message"):
             return self._serve_error()
 
         length = int(self.headers.get("Content-Length", "0"))
